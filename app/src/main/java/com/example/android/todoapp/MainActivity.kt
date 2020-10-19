@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.android.todoapp.database.AppDatabase
@@ -17,6 +20,8 @@ import com.example.android.todoapp.databinding.ActivityMainBinding
 import com.example.android.todoapp.database.AppDatabaseDao
 import com.example.android.todoapp.database.Category
 import com.example.android.todoapp.database.Task
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 import com.example.android.todoapp.tracker.DatePickerFragment
 import com.example.android.todoapp.tracker.TrackerViewModel
 import kotlinx.coroutines.*
@@ -26,6 +31,8 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
     private lateinit var drawer:DrawerLayout
+    private lateinit var navController: NavController
+    private lateinit var bottomNav : BottomNavigationView
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main +  viewModelJob)
 
@@ -39,20 +46,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        val toolbar: androidx.appcompat.widget.Toolbar = binding.toolbar
+        val toolbar: Toolbar = binding.toolbar
         setSupportActionBar(toolbar)
         drawer = binding.drawerLayout
         val toggle = ActionBarDrawerToggle(
             this, drawer, toolbar,
             R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
-        val bottomNav= binding.bottomNavigationView
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
-        val navController: NavController = navHostFragment.navController
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.tasksFragment, R.id.tracker))
-        setupActionBarWithNavController(navController,appBarConfiguration)
-        bottomNav.setupWithNavController(navController)
+        bottomNav= binding.bottomNavigationView
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+        navController = navHostFragment.navController
+       bottomNav.setupWithNavController(navController)
+        setupActionBarWithNavController(navController)
         drawer.addDrawerListener(toggle)
         toggle.syncState()
     }
@@ -64,6 +69,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        super.onSupportNavigateUp()
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.tasksFragment, R.id.tracker))
+        return NavigationUI.navigateUp(navController,appBarConfiguration)
+    }
         /*uiScope.launch {
             insertCat(Category(1, "Home", 0), dataSource)
             insertCat(Category(2, "Work", 0), dataSource)
@@ -120,6 +130,9 @@ class MainActivity : AppCompatActivity() {
             //get1(dataSource)
             get(cal.timeInMillis, dataSource)
         }*/
+
+
+
     override fun onStop() {
         super.onStop()
         viewModelJob.cancel()

@@ -35,8 +35,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-50" />
-                            <option name="y" value="21" />
+                            <option name="x" value="-244" />
+                            <option name="y" value="-5" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -51,13 +51,13 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="tracker">
+                  <entry key="trackerFragment2">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="256" />
-                            <option name="y" value="-6" />
+                            <option name="x" value="-32" />
+                            <option name="y" value="-18" />
                           </Point>
                         </option>
                         <option name="myPositions">

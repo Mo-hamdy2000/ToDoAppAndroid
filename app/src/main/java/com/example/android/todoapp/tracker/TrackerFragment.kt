@@ -1,19 +1,18 @@
 package com.example.android.todoapp.tracker
 
-import android.app.Activity
 import android.app.Application
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.android.todoapp.R
 import com.example.android.todoapp.database.AppDatabase
 import com.example.android.todoapp.database.AppDatabaseDao
 import com.example.android.todoapp.databinding.TrackerFragmentBinding
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
@@ -28,38 +27,51 @@ import java.util.*
 class TrackerFragment : Fragment() {
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main +  viewModelJob)
-    lateinit var viewModel: TrackerViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding : TrackerFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.tracker_fragment,container,false)
+
+        println("Iam Here")
+        val binding : TrackerFragmentBinding =
+            DataBindingUtil.inflate(inflater, R.layout.tracker_fragment,container,false)
         val application = requireNotNull(this.activity).application
         val dataSource = AppDatabase.getInstance(application).appDatabaseDao
-        viewModel = TrackerViewModel(application, dataSource)
-        binding.datePickButton.setOnClickListener {
-            val newFragment = DatePickerFragment(viewModel)
-            newFragment.show(parentFragmentManager, "datePicker")
-        }
         binding.lifecycleOwner=this
-        viewModel.isUpdated.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if (!it) {
-                uiScope.launch {
-                    get(binding)
-                }
-            }
-        })
+
+
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.DAY_OF_MONTH, 1)
+
+        uiScope.launch {
+            get(application, cal.timeInMillis, dataSource, binding)
+        }
+
+
+
 
         return binding.root
     }
 
-    private suspend fun get(binding: TrackerFragmentBinding){
+    private suspend fun get(application: Application, timeSec: Long, database: AppDatabaseDao, binding: TrackerFragmentBinding){
         withContext(Dispatchers.IO) {
 
-            /*val valuesAdded = database.getTasksCountInMonthWeeks(timeSec)
+            //database.insertAll(SampleData.populateTasksData())
+
+            val c = database.getCategoriesInfo()
+            for (category in c) {
+                println(category.categoryId.toString() + " " + category.categoryTitle + " " + category.categoryColor)
+            }
+
+            val v = database.getTasksInfo()
+            for (task in v) {
+                println(task.taskId.toString() + " " + task.title + " " + task.dequeueTime + " " + task.status)
+            }
+            val values = database.getTasksCountInMonthWeeks(timeSec)
+            println(values.toString())
             val tempEntries = Array<Int>(4) {0}
-            for (value in valuesAdded) {
+            for (value in values) {
                 if (value.week == 1)
                     tempEntries[0]  = value.count
                 else if (value.week == 2)
@@ -69,9 +81,9 @@ class TrackerFragment : Fragment() {
                 else if (value.week == 4)
                     tempEntries[3]  = value.count
             }
-            val valuesFinished = database.getTasksFinishedCountInMonthWeeks(timeSec)
+            val values2 = database.getTasksFinishedCountInMonthWeeks(timeSec)
             val tempEntries2 = Array<Int>(4) {0}
-            for (value in valuesFinished) {
+            for (value in values2) {
                 if (value.week == 1)
                     tempEntries2[0]  = value.count
                 else if (value.week == 2)
@@ -80,14 +92,11 @@ class TrackerFragment : Fragment() {
                     tempEntries2[2]  = value.count
                 else if (value.week == 4)
                     tempEntries2[3]  = value.count
-            }*/
-
-            val linesData = viewModel.getLinesData()
-
-            val entries1 = linesData[0].mapIndexed { index, arrayList ->
-                Entry(index.toFloat()+1.0f, linesData[0][index].toFloat()) }
-            val entries2 = linesData[1].mapIndexed { index, arrayList ->
-                Entry(index.toFloat()+1.0f, linesData[1][index].toFloat()) }
+            }
+            val entries1 = tempEntries.mapIndexed { index, arrayList ->
+                Entry(index.toFloat() + 1f, tempEntries[index].toFloat()) }
+            val entries2 = tempEntries2.mapIndexed { index, arrayList ->
+                Entry(index.toFloat() + 1f, tempEntries2[index].toFloat()) }
 
             val lineChartView = binding.lineChartView
             val lineDataSet1 = LineDataSet(entries1, "Added Tasks")
@@ -100,39 +109,26 @@ class TrackerFragment : Fragment() {
             lineDataSet2.setDrawValues(false)
             lineDataSet2.setAxisDependency(YAxis.AxisDependency.LEFT)
 
-
             val lineDataSets = arrayListOf(lineDataSet1, lineDataSet2)
-            lineChartView.data = LineData(lineDataSets as List<ILineDataSet>?)
             val xAxis: XAxis = lineChartView.getXAxis()
-            xAxis.setDrawGridLines(false)
-            xAxis.labelCount = 6
-            xAxis.axisMinimum = 0f
-            xAxis.axisMaximum = 5f
-            xAxis.valueFormatter = object :
-                ValueFormatter() {
-                override fun getFormattedValue(value: Float): String {
-                    println(value.toString())
-                    println(value.toInt().toString())
-                    return getLabel(value.toInt())
+            val xAxisLabel: ArrayList<String> = ArrayList()
+            xAxisLabel.add("Week 1")
+            xAxisLabel.add("Week 2")
+            xAxisLabel.add("Week 3")
+            xAxisLabel.add("Week 4")
+            xAxis.valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float, axis: AxisBase?): String? {
+                    return xAxisLabel[value.toInt()]
                 }
             }
+            lineChartView.data = LineData(lineDataSets as List<ILineDataSet>?)
+            /*lineChartView.xAxis.mAxisMaximum = 5f
+            lineChartView.xAxis.mAxisMinimum = 0f*/
             lineChartView.axisLeft.mAxisMaximum = 10f
             lineChartView.axisLeft.mAxisMinimum = 0f
             lineChartView.axisLeft.mAxisRange = 10f
+            println("data added")
             lineChartView.invalidate()
         }
-    }
-
-    fun getLabel(value: Int):String{
-        if (value == 1) {
-            return "Week 1"
-        } else if (value == 2) {
-            return "Week 2"
-        } else if (value == 3) {
-            return "Week 3"
-        } else if (value == 4) {
-            return "Week 4"
-        } else
-            return ""
     }
 }

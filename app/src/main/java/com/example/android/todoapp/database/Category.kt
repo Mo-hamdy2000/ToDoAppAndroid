@@ -15,4 +15,6 @@ data class Category  (
 
     @ColumnInfo(name = "category_color")
     var categoryColor: Long = 0L
+//    @ColumnInfo(name = "number_of_tasks")
+//    var numberOfTasks: Long = 0L
 )

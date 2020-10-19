@@ -43,6 +43,8 @@ interface AppDatabaseDao {
 
     @Query("SELECT * FROM category_table ORDER BY category_id DESC")
     fun getAllCategories(): LiveData<List<Category>>
+    @Query("SELECT * FROM category_table ORDER BY category_id DESC")
+    fun getAllCategoriesWOOOOOO(): List<Category>
 
     @Query("SELECT * FROM task_table Where task_category = :categoryId ORDER BY task_id DESC")
     fun getTasksWithCategory(categoryId: Long): LiveData<List<Task>>
@@ -71,12 +73,20 @@ interface AppDatabaseDao {
             "GROUP BY t.range")
     fun getTasksFinishedCountInMonthWeeks(monthStartTime: Long, monthEndTime: Long): List<CountRecord>
 
+    @Query("SELECT task_category , count(*) FROM task_table WHERE task_dequeue_time BETWEEN :fromTime AND :toTime GROUP BY task_category ORDER BY task_category DESC ")
+    fun getTasksByCategoryWithin(fromTime : Long,toTime : Long) : List<CategoryTest>
+
+
     @Query("SELECT :monthEndTime")
     fun getTest(monthEndTime: Long): Long
 
-
+//    @Query("SELECT count(*) FROM task_table WHERE task_category = :taskCategory")
+//    fun getTasksCountByCategory(taskCategory: Long): Long
+    @Query("SELECT count(*) From task_table GROUP BY task_category ORDER BY task_category DESC")
+    fun getCategoryTasksCount() : List<Int>
     @Query("SELECT * FROM task_table")
     fun getTasksInfo(): List<Task>
+
 
     @Query("SELECT * FROM category_table")
     fun getCategoriesInfo(): List<Category>

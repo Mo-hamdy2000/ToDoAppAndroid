@@ -3,15 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/trackerFragment">
+    app:startDestination="@id/tasksFragment">
     <fragment
         android:id="@+id/tasksFragment"
         android:name="com.example.android.todoapp.recyclerview.TasksFragment"
-        android:label="TasksFragment" >
-        <action
-            android:id="@+id/action_tasksFragment_to_tracker"
-            app:destination="@id/tracker" />
-    </fragment>
+        android:label="TasksFragment" />
     <fragment
         android:id="@+id/tracker"
         android:name="com.example.android.todoapp.tracker.TrackerFragment"
