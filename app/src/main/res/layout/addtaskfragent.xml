@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<RelativeLayout
+    android:id="@+id/add_task_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".addtasks.AddTaskFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_text_layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        app:helperText="*title for your task"
+        app:helperTextEnabled="true"
+        android:layout_marginBottom="16dp"
+        >
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edit_text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/title"/>
+    </com.google.android.material.textfield.TextInputLayout>
+   <com.google.android.material.textfield.TextInputLayout
+       android:id="@+id/edit_text_layout_description"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/edit_text_layout_title"
+       app:helperText="*enter your description"
+       app:helperTextEnabled="true"
+       
+       android:layout_marginBottom="25dp"
+
+       >
+
+       <com.google.android.material.textfield.TextInputEditText
+           android:id="@+id/edit_text_description"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:minHeight="90dp"
+           android:hint="@string/discreption_edittext">
+
+       </com.google.android.material.textfield.TextInputEditText>
+   </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/categroy_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_text_layout_description" />
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:text="@string/add" />
+    
+</RelativeLayout>
+</layout>

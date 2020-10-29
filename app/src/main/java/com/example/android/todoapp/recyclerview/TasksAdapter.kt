@@ -1,6 +1,7 @@
 package com.example.android.todoapp.recyclerview
 
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -17,11 +18,14 @@ class TasksAdapter (private val clickListener :TaskListener, private val databas
     private val categories=databaseDao.getAllCategories()
     private  lateinit var category:Category
     class ViewHolder private constructor(val binding: ListItemTaskBinding):RecyclerView.ViewHolder(binding.root) {
-      fun bind(clickListener:TaskListener,item: Task,category: Category){
-          val color=category.categoryColor
+      fun bind(clickListener:TaskListener,item: Task,category : Category?){
+          val color=category?.categoryColor
           binding.task=item
           binding.clickListener=clickListener
+            if(color != null){
           binding.theCard.setCardBackgroundColor(color.toInt())
+            }
+          Log.i("3rd messgae","i completed it")
           binding.executePendingBindings()
     }
         companion object{
@@ -55,8 +59,8 @@ class TasksAdapter (private val clickListener :TaskListener, private val databas
         /*it may throw  a null exception in some exceptions but could be handled using elvis
         * operator
         * */
-        category= categories.value!![item.categoryId.toInt()]
-        holder.bind( clickListener,item ,category )
+        //category= categories.value!![item.categoryId.toInt()]
+        holder.bind( clickListener,item ,null )
     }
 
 }
