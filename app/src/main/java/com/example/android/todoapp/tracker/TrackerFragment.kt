@@ -15,6 +15,7 @@ import com.example.android.todoapp.database.AppDatabase
 import com.example.android.todoapp.database.AppDatabaseDao
 import com.example.android.todoapp.databinding.TrackerFragmentBinding
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
@@ -169,7 +170,19 @@ class TrackerFragment : Fragment() {
                 pieData = PieData(dataSet)
                 pieChart.data = pieData
                 pieChart.isDrawHoleEnabled = false
-                pieData.setValueTextSize(10f)
+                //pieData.setDrawValues(false)
+            pieChart.setDrawEntryLabels(false)
+            dataSet.yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE;
+
+            pieChart.isDrawHoleEnabled = true
+            pieChart.holeRadius = 70F
+            pieChart.description.isEnabled = false
+            pieChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+//            val legend: Legend = pieChart.legend
+//            legend.verticalAlignment = Legend.LegendVerticalAlignment.CENTER
+//            legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+//            legend.orientation = Legend.LegendOrientation.VERTICAL
+//            legend.setDrawInside(false)
             Log.i("WHATIFWEDIE", dataSource.getTasksByCategoryWithin(1593727200000,1654418400000).toString())
             }
 
