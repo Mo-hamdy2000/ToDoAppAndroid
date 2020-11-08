@@ -7,4 +7,6 @@
     <string name="title">Write a title ..</string>
     <string name="discreption_edittext">write yout discreption for the task ..</string>
     <string name="add">Add</string>
+    <string name="quote">\" Ut ac condimentum lacus, et gravida est. Nam velit turpis, congue vel purus id, viverra aliquam metus. Phasellus sit amet leo turpis. \"
+    </string>
 </resources>

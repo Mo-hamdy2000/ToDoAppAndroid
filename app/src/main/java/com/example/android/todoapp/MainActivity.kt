@@ -1,6 +1,9 @@
 package com.example.android.todoapp
 
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.util.Log
@@ -30,6 +33,7 @@ import com.example.android.todoapp.tracker.TrackerViewModel
 import kotlinx.coroutines.*
 import com.example.android.todoapp.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.quote.*
 import kotlinx.android.synthetic.main.tasksrecylerview.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var drawer:DrawerLayout
     private lateinit var navController: NavController
     private lateinit var bottomNav : BottomNavigationView
+    private lateinit var quotesDialog : Dialog
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
@@ -67,15 +72,26 @@ class MainActivity : AppCompatActivity() {
         )
 
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.tasksFragment, R.id.tracker), drawer_layout)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        toolbar.setupWithNavController(navController, appBarConfiguration)
-        bottomNav= binding.bottomNavigationView
-        bottomNav.setupWithNavController(navController)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         navController = navHostFragment.navController
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        toolbar.setupWithNavController(navController, appBarConfiguration)
         setupActionBarWithNavController(navController)
+
+        bottomNav= binding.bottomNavigationView
+        bottomNav.setupWithNavController(navController)
         drawer.addDrawerListener(toggle)
         toggle.syncState()
+
+        quotesDialog = Dialog(this)
+        quotesDialog.setContentView(R.layout.quote)
+        quotesDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val closeButton = quotesDialog.close_button
+        closeButton.setOnClickListener { quotesDialog.dismiss() }
+        val doneButton = quotesDialog.done_button
+        doneButton.setOnClickListener{ quotesDialog.dismiss()}
+        quotesDialog.show()
     }
 
 
