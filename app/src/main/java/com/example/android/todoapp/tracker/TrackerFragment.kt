@@ -1,18 +1,20 @@
 package com.example.android.todoapp.tracker
 
-import android.app.Application
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.android.todoapp.R
 import com.example.android.todoapp.database.AppDatabase
 import com.example.android.todoapp.database.AppDatabaseDao
 import com.example.android.todoapp.databinding.TrackerFragmentBinding
-import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
@@ -26,15 +28,19 @@ class TrackerFragment : Fragment() {
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main +  viewModelJob)
     private lateinit var viewModel: TrackerViewModel
+    private lateinit var binding : TrackerFragmentBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding : TrackerFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.tracker_fragment,container,false)
+        binding= DataBindingUtil.inflate(inflater, R.layout.tracker_fragment,container,false)
         val application = requireNotNull(this.activity).application
         val dataSource = AppDatabase.getInstance(application).appDatabaseDao
         viewModel = TrackerViewModel(application, dataSource)
+        uiScope.launch {
+            getCategories(dataSource)
+        }
         binding.datePickButton.setOnClickListener {
             val newFragment = DatePickerFragment(viewModel)
             newFragment.show(parentFragmentManager, "datePicker")
@@ -44,6 +50,7 @@ class TrackerFragment : Fragment() {
             if (!it) {
                 uiScope.launch {
                     get(binding)
+                    getCategories(dataSource)
                 }
             }
         })
@@ -139,17 +146,17 @@ class TrackerFragment : Fragment() {
         val yValues = ArrayList<PieEntry>()
         val pieChart: PieChart = binding.categoriesPie
         withContext(Dispatchers.IO) {
-            val categories = dataSource.getAllCategoriesWOOOOOO()
-            val tasksNumber = dataSource.getCategoryTasksCount()
-            val myColors = arrayOf(
-                Color.rgb(100, 221, 23), Color.rgb(128, 0, 128), Color.rgb(255, 136, 0),
-                Color.rgb(255, 0, 0), Color.rgb(255, 127, 80), Color.rgb(47, 95, 255)
-            )
+            val categories = dataSource.getAllCategoriesPie()
+            val tasksNumber = dataSource.getTasksByCategoryWithin(0,99994418400000)
+            val colors = mutableListOf<Int>()
             print(tasksNumber.toString())
-            for (c in categories.indices) {
-                yValues.add(PieEntry(tasksNumber[c].toFloat(), categories[c].categoryTitle))
+            for (c in tasksNumber.indices) {
+                yValues.add(PieEntry(tasksNumber[c].tasksCount.toFloat()
+                    , categories[tasksNumber[c].taskCategory.toInt()-1].categoryTitle))
+                //api
+                colors.add(categories[tasksNumber[c].taskCategory.toInt()-1].categoryColor.toInt())
             }
-
+            Log.i("Colors", colors.toString())
                 dataSet = PieDataSet(yValues, "Categories")
             val formatter: ValueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(
@@ -158,11 +165,12 @@ class TrackerFragment : Fragment() {
                 }
             }
             dataSet.valueFormatter = formatter
-                dataSet.colors = myColors.toMutableList()
+                dataSet.colors = colors
                 pieData = PieData(dataSet)
                 pieChart.data = pieData
                 pieChart.isDrawHoleEnabled = false
                 pieData.setValueTextSize(10f)
+            Log.i("WHATIFWEDIE", dataSource.getTasksByCategoryWithin(1593727200000,1654418400000).toString())
             }
 
         }

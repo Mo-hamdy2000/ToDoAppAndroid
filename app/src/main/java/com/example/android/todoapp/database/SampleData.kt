@@ -1,13 +1,15 @@
 package com.example.android.todoapp.database
 
+import android.graphics.Color
+
 class SampleData {
     companion object {
         fun populateCategoriesData(): List<Category>{
             return listOf(
-                Category(1, "Home", 2752767),
-                Category(2, "Work", 16711684),
-                Category(3, "Personal", 65314),
-                Category(4, "Education", 0))
+                Category(1, "Home",Color.rgb(255, 0, 0).toLong()),
+                Category(2, "Work", Color.rgb(0, 225, 255).toLong()),
+                Category(3, "Personal", Color.rgb(255, 255, 0).toLong()),
+                Category(4, "Education", Color.rgb(0, 0, 255).toLong()))
         }
 
         fun populateTasksData(): List<Task>{

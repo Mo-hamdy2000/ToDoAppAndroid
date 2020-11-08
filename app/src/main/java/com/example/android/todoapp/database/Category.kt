@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName="category_table")
-data class Category  (
+data class Category(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "category_id")
     var categoryId: Long = 0L,

@@ -44,8 +44,9 @@ interface AppDatabaseDao {
 
     @Query("SELECT * FROM category_table ORDER BY category_id DESC")
     fun getAllCategories(): LiveData<List<Category>>
+
     @Query("SELECT * FROM category_table ORDER BY category_id DESC")
-    fun getAllCategoriesWOOOOOO(): List<Category>
+    fun getAllCategoriesPie(): List<Category>
 
     @Query("SELECT * FROM task_table Where task_category = :categoryId ORDER BY task_id DESC")
     fun getTasksWithCategory(categoryId: Long): LiveData<List<Task>>
