@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.0"
+    buildToolsVersion "30.0.1"
 
     defaultConfig {
         applicationId "com.example.android.todoapp"
@@ -71,7 +71,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
 
     def room_version = "2.2.5"
-
+    implementation 'dev.sasikanth:colorsheet:1.0.0'
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
