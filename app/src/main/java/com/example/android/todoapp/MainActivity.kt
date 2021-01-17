@@ -32,6 +32,8 @@ import com.example.android.todoapp.tracker.DatePickerFragment
 import com.example.android.todoapp.tracker.TrackerViewModel
 import kotlinx.coroutines.*
 import com.example.android.todoapp.databinding.ActivityMainBinding
+
+import dev.sasikanth.colorsheet.ColorSheet
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.quote.*
 import kotlinx.android.synthetic.main.tasksrecylerview.*
@@ -50,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var quotesDialog : Dialog
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
+    private var selectedColor: Int = ColorSheet.NO_COLOR
     companion object {
         fun getApp() {
             return
@@ -83,6 +85,8 @@ class MainActivity : AppCompatActivity() {
         bottomNav.setupWithNavController(navController)
         drawer.addDrawerListener(toggle)
         toggle.syncState()
+
+
 
         quotesDialog = Dialog(this)
         quotesDialog.setContentView(R.layout.quote)

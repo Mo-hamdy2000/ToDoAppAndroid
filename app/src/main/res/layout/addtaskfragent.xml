@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <RelativeLayout
     android:id="@+id/add_task_fragment"
     android:layout_width="match_parent"
@@ -16,13 +20,14 @@
         android:layout_alignParentTop="true"
         app:helperText="*title for your task"
         app:helperTextEnabled="true"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         >
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/edit_text_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="90dp"
         android:hint="@string/title"/>
     </com.google.android.material.textfield.TextInputLayout>
    <com.google.android.material.textfield.TextInputLayout
@@ -32,8 +37,7 @@
        android:layout_below="@id/edit_text_layout_title"
        app:helperText="*enter your description"
        app:helperTextEnabled="true"
-       
-       android:layout_marginBottom="25dp"
+       android:layout_marginBottom="16dp"
 
        >
 
@@ -41,27 +45,76 @@
            android:id="@+id/edit_text_description"
            android:layout_width="match_parent"
            android:layout_height="match_parent"
-           android:minHeight="90dp"
+           android:minHeight="130dp"
            android:hint="@string/discreption_edittext">
 
        </com.google.android.material.textfield.TextInputEditText>
    </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editText_category_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/categroy_spinner"
+
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_category"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="90dp"
+            android:hint="@string/write_here_to_add_a_category"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Spinner
         android:id="@+id/categroy_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edit_text_layout_description" />
-
-    <Button
-        android:id="@+id/add_button"
+        android:layout_below="@id/edit_text_layout_description"
+        android:layout_margin="8dp"
+        android:minHeight="40dp"
+        />
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText_category_layout"
+        android:layout_margin="15dp"
+        android:gravity="center"
+        >
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_color_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
+        android:enabled="false"
+        android:layout_margin="10dp"
+        android:text="@string/colorButton"
+        style="?attr/materialButtonOutlinedStyle"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_category_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:layout_margin="10dp"
+        android:text="@string/add_category_button_string"
+        style="?attr/materialButtonOutlinedStyle"
+        />
+    </LinearLayout>
+    <Button
+        android:id="@+id/add_button"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonsLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:maxWidth="30dp"
         android:text="@string/add" />
     
 </RelativeLayout>
+</ScrollView>
 </layout>

@@ -38,8 +38,11 @@ class TasksFragment : Fragment() {
         val tasksViewModel = ViewModelProvider(this,viewModelFactory).get(TasksViewModel::class.java)
 
         binding.lifecycleOwner=this
-
+     
         val adapter = TasksAdapter(TaskListener { taskId ->tasksViewModel.onTaskClicked(taskId)  },dataSource)
+        tasksViewModel.categories.observe(viewLifecycleOwner, Observer {
+            adapter.categories=it
+        })
 
 
         binding.TasksList.adapter=adapter
@@ -52,11 +55,24 @@ class TasksFragment : Fragment() {
 
            }
         })
+        // to store the value kept updated from live data
+        var tasksChecked : List<Task>?=null
+        tasksViewModel.checkedTasks.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                tasksChecked=it
+            }
+        })
+        binding.tasksAreDoneButton.setOnClickListener{
+            Log.i("9th message", "element are selected")
+            Log.i("test","${tasksChecked} empty or not")
+            tasksViewModel.updateTheDoneTasks(tasksChecked)
 
-        Log.i("2nd messgae","i completed it")
+        }
+
+
         binding.RoundedButton.setOnClickListener {v->
             v.findNavController().navigate(R.id.action_tasksFragment_to_addTaskFragment)
-
+            Log.i("2nd messgae","i completed it")
         }
 
         return binding.root

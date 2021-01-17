@@ -34,6 +34,7 @@ class SpinnerAdapter(context: Context,list: List<Category>) : ArrayAdapter<Categ
         val category:Category?=getItem(position)
         if (category!=null){
             theText.setText(category.categoryTitle)
+            theText.setBackgroundColor(category.categoryColor.toInt())
         }
 
 

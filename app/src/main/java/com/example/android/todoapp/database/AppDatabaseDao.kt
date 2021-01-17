@@ -92,6 +92,8 @@ interface AppDatabaseDao {
 
     @Query("SELECT * FROM category_table")
     fun getCategoriesInfo(): List<Category>
-
+    //to get the tasks that are done and still appear to user in recyclerview
+    @Query("SELECT * FROM task_table Where task_status=2 ")
+    fun getDoneTasks(): LiveData<List<Task>>
 
 }
