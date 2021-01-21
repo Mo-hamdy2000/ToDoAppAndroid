@@ -183,7 +183,8 @@ class TrackerFragment : Fragment() {
 //            legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
 //            legend.orientation = Legend.LegendOrientation.VERTICAL
 //            legend.setDrawInside(false)
-            Log.i("WHATIFWEDIE", dataSource.getTasksByCategoryWithin(1593727200000,1654418400000).toString())
+            Log.i("WHAT", dataSource.getTasksByCategoryWithin(1593727200000,1654418400000).toString())
+            pieChart.invalidate()
             }
 
         }

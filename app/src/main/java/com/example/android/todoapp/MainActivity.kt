@@ -79,6 +79,9 @@ class MainActivity : AppCompatActivity() {
         quotesDialog = Dialog(this)
         quotesDialog.setContentView(R.layout.quote)
         quotesDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val quotesData = QuotesData()
+        val quoteText = quotesDialog.quote_text
+        quoteText.text = quotesData.randomQuote()
         val closeButton = quotesDialog.close_button
         closeButton.setOnClickListener { quotesDialog.dismiss() }
         val doneButton = quotesDialog.done_button
